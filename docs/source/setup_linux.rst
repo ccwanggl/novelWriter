@@ -43,8 +43,8 @@ Step 2: Install Package (Optional)
 ----------------------------------
 
 You can install novelWriter to the default location for Python packages using ``setuptools``. This
-step is optional as you can also just put the novelWriter program folder wherever you like. For
-instance to ``/opt/novelWriter`` and run Step 3 to set up icons and launcher.
+step is optional as you can also just put the novelWriter program folder wherever you like
+yourself. For instance in ``/opt/novelWriter``, and then run Step 3 to set up icons and launcher.
 
 To install novelWriter to the default location, it requires that you have ``setuptools`` installed
 on your system. If you don't have it installed, it can usually be installed from your distro's
@@ -84,7 +84,7 @@ Step 3: Create Launcher Icons
 
 Regardless of where you extract or install the source files, you can set up a standard icon and a
 launcher. To set up this desktop launcher, the needed icons, and the project file association,
-run the following from inside the novelWriter folder:
+run the following from inside the novelWriter folder at the installed or final location:
 
 .. code-block:: console
 
@@ -95,3 +95,16 @@ all users, run the script with the ``sudo`` command.
 
 .. tip::
    All options of the setup script can be listed with: ``./setup.py help``.
+
+
+Uninstalling Icons
+==================
+
+The steps taken by the ``xdg-install`` step can be reversed by running:
+
+.. code-block:: console
+
+   ./setup.py xdg-uninstall
+
+This will remove the desktop launcher and icons from the system. As above, whether this is done on
+the current user, or system wide, depends on whether this command is called with ``sudo`` or not.
