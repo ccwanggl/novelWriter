@@ -28,11 +28,14 @@ import logging
 import re
 
 from operator import itemgetter
-from PyQt5.QtCore import QRegularExpression
+from functools import partial
 
+from PyQt5.QtCore import QCoreApplication, QRegularExpression
+
+from nw.enum import nwItemLayout, nwItemType
+from nw.common import numberToRoman
+from nw.constants import nwConst, nwRegEx, nwUnicode
 from nw.core.document import NWDoc
-from nw.core.tools import numberToWord, numberToRoman
-from nw.constants import nwConst, nwUnicode, nwItemLayout, nwItemType, nwRegEx
 
 logger = logging.getLogger(__name__)
 
@@ -140,6 +143,13 @@ class Tokenizer():
 
         # Error Handling
         self.errData = []
+
+        # Function Mapping
+        self._localLookup = self.theProject.localLookup
+        self.tr = partial(QCoreApplication.translate, "Tokenizer")
+
+        # Cached Translations
+        self._trSynopsis = self.tr("Synopsis")
 
         return
 
@@ -249,7 +259,7 @@ class Tokenizer():
         if theItem.itemType != nwItemType.ROOT:
             return False
 
-        theTitle = "Notes: %s" % theItem.itemName
+        theTitle = "%s: %s" % (self._localLookup("Notes"), theItem.itemName)
         self.theTokens = []
         self.theTokens.append((
             self.T_TITLE, 0, theTitle, None, self.A_PBB | self.A_CENTRE
@@ -278,10 +288,10 @@ class Tokenizer():
 
         docSize = len(self.theText)
         if docSize > nwConst.MAX_DOCSIZE:
-            errVal = "Document '%s' is too big (%.2f MB). Skipping." % (
-                self.theItem.itemName, docSize/1.0e6
+            errVal = self.tr("Document '{0}' is too big ({1} MB). Skipping.").format(
+                self.theItem.itemName, f"{docSize/1.0e6:.2f}"
             )
-            self.theText = "# ERROR\n\n%s\n\n" % errVal
+            self.theText = "# %s\n\n%s\n\n" % (self.tr("ERROR"), errVal)
             self.errData.append(errVal)
 
         self.isNone  = self.theItem.itemLayout == nwItemLayout.NO_LAYOUT
@@ -653,11 +663,12 @@ class Tokenizer():
         theTitle = theTitle.replace(r"%sc%", str(self.numChScene))
         theTitle = theTitle.replace(r"%sca%", str(self.numAbsScene))
         if r"%chw%" in theTitle:
-            theTitle = theTitle.replace(r"%chw%", numberToWord(self.numChapter, "en"))
+            theTitle = theTitle.replace(r"%chw%", self._localLookup(self.numChapter))
         if r"%chi%" in theTitle:
             theTitle = theTitle.replace(r"%chi%", numberToRoman(self.numChapter, True))
         if r"%chI%" in theTitle:
             theTitle = theTitle.replace(r"%chI%", numberToRoman(self.numChapter, False))
-        return theTitle
+
+        return theTitle[:1].upper() + theTitle[1:]
 
 # END Class Tokenizer

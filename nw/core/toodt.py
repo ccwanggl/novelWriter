@@ -29,11 +29,11 @@ import logging
 
 from lxml import etree
 from hashlib import sha256
-from datetime import datetime
 from zipfile import ZipFile
+from datetime import datetime
 
+from nw.constants import nwKeyWords, nwLabels
 from nw.core.tokenizer import Tokenizer
-from nw.constants import nwLabels, nwKeyWords
 
 logger = logging.getLogger(__name__)
 
@@ -507,15 +507,17 @@ class ToOdt(Tokenizer):
     def _formatSynopsis(self, tText):
         """Apply formatting to synopsis lines.
         """
-        rTxt = "**Synopsis:** %s" % tText
-        rFmt = "_B         b_ %s" % (" "*len(tText))
+        sSynop = self._localLookup("Synopsis")
+        rTxt = "**%s:** %s" % (sSynop, tText)
+        rFmt = "_B%s b_ %s" % (" "*len(sSynop), " "*len(tText))
         return rTxt, rFmt
 
     def _formatComments(self, tText):
         """Apply formatting to comments.
         """
-        rTxt = "**Comment:** %s" % tText
-        rFmt = "_B        b_ %s" % (" "*len(tText))
+        sComm = self._localLookup("Comment")
+        rTxt = "**%s:** %s" % (sComm, tText)
+        rFmt = "_B%s b_ %s" % (" "*len(sComm), " "*len(tText))
         return rTxt, rFmt
 
     def _formatKeywords(self, tText):
@@ -530,7 +532,7 @@ class ToOdt(Tokenizer):
         if theBits[0] in nwLabels.KEY_NAME:
             tText = nwLabels.KEY_NAME[theBits[0]]
             rTxt += "**%s:** " % tText
-            rFmt  += "_B%s b_ " % (" "*len(tText))
+            rFmt += "_B%s b_ " % (" "*len(tText))
             if len(theBits) > 1:
                 if theBits[0] == nwKeyWords.TAG_KEY:
                     rTxt += "%s" % theBits[1]
@@ -561,7 +563,7 @@ class ToOdt(Tokenizer):
         ##
 
         if len(theText) != len(theFmt):
-            # Genrate dummy format if there isn't any
+            # Generate dummy format if there isn't any or it doesn't match
             theFmt = " "*len(theText)
 
         # XML functions

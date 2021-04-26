@@ -34,7 +34,8 @@ from PyQt5.QtWidgets import (
     QTreeWidget, QTreeWidgetItem, QMenu, QAction, QAbstractItemView
 )
 
-from nw.constants import nwKeyWords, nwLabels, nwOutline
+from nw.enum import nwOutline
+from nw.constants import trConst, nwKeyWords, nwLabels
 
 logger = logging.getLogger(__name__)
 
@@ -149,7 +150,7 @@ class GuiOutline(QTreeWidget):
         """
         self.clear()
         self.setColumnCount(1)
-        self.setHeaderLabel(nwLabels.OUTLINE_COLS[nwOutline.TITLE])
+        self.setHeaderLabel(trConst(nwLabels.OUTLINE_COLS[nwOutline.TITLE]))
 
         self.treeOrder = []
         self.colWidth  = {}
@@ -355,7 +356,7 @@ class GuiOutline(QTreeWidget):
         if self.firstView:
             theLabels = []
             for i, hItem in enumerate(self.treeOrder):
-                theLabels.append(nwLabels.OUTLINE_COLS[hItem])
+                theLabels.append(trConst(nwLabels.OUTLINE_COLS[hItem]))
                 self.colIndex[hItem] = i
 
             self.setHeaderLabels(theLabels)
@@ -474,7 +475,7 @@ class GuiOutlineHeaderMenu(QMenu):
         self.theParent = theParent
         self.acceptToggle = True
 
-        mnuHead = QAction("Select Columns", self)
+        mnuHead = QAction(self.tr("Select Columns"), self)
         self.addAction(mnuHead)
         self.addSeparator()
 
@@ -482,7 +483,7 @@ class GuiOutlineHeaderMenu(QMenu):
         for hItem in nwOutline:
             if hItem == nwOutline.TITLE:
                 continue
-            self.actionMap[hItem] = QAction(nwLabels.OUTLINE_COLS[hItem], self)
+            self.actionMap[hItem] = QAction(trConst(nwLabels.OUTLINE_COLS[hItem]), self)
             self.actionMap[hItem].setCheckable(True)
             self.actionMap[hItem].toggled.connect(
                 lambda isChecked, tItem=hItem : self._columnToggled(isChecked, tItem)

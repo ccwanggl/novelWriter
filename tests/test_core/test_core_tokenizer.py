@@ -117,6 +117,9 @@ def testCoreToken_TextOps(monkeypatch, nwMinimal, dummyGUI):
     """
     theProject = NWProject(dummyGUI)
     theProject.projTree.setSeed(42)
+    theProject.projLang = "en"
+    theProject._loadProjectLocalisation()
+
     theToken = Tokenizer(theProject, dummyGUI)
     theToken.setKeepMarkdown(True)
 
@@ -154,13 +157,13 @@ def testCoreToken_TextOps(monkeypatch, nwMinimal, dummyGUI):
     assert theToken.setText(sHandle) is True
     assert theToken.theText == docText
 
-    monkeypatch.setattr("nw.constants.nwConst.MAX_DOCSIZE", 100)
-    assert theToken.setText(sHandle, docText) is True
-    assert theToken.theText == (
-        "# ERROR\n\n"
-        "Document 'New Scene' is too big (0.00 MB). Skipping.\n\n"
-    )
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr("nw.constants.nwConst.MAX_DOCSIZE", 100)
+        assert theToken.setText(sHandle, docText) is True
+        assert theToken.theText == (
+            "# ERROR\n\n"
+            "Document 'New Scene' is too big (0.00 MB). Skipping.\n\n"
+        )
 
     assert theToken.setText(sHandle, docText) is True
     assert theToken.theText == docText
@@ -412,6 +415,8 @@ def testCoreToken_Headers(dummyGUI):
     """Test the header and page parser of the Tokenizer class.
     """
     theProject = NWProject(dummyGUI)
+    theProject.projLang = "en"
+    theProject._loadProjectLocalisation()
     theToken = Tokenizer(theProject, dummyGUI)
 
     # Nothing

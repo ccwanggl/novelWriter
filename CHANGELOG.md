@@ -1,5 +1,113 @@
 # novelWriter Changelog
 
+## Version 1.3 RC 1 [2021-04-18]
+
+### Release Notes
+
+This is a release candidate of 1.3. The primary feature of release 1.3 is the addition of
+internationalisation (i18n) of novelWriter. The release introduces support for Portuguese, French,
+and Norwegian in addition to the default English.
+
+There have been no major changes since the release of 1.3 Beta 1, but the bugfixes and improvements
+from version 1.2.3 have been included.
+
+### Detailed Changelog
+
+**Internationalisation**
+
+* The Portuguese translation has been updated and should now be complete. Thanks again to Bruno
+  Meneguello (@bkmeneguello). PR #742.
+
+*The changes since 1.3 Beta 1 also include the changes of release 1.2.3.*
+
+----
+
+## Version 1.3 Beta 1 [2021-03-28]
+
+### Release Notes
+
+This is a pre-release of 1.3. The primary feature of release 1.3 is the addition of
+internationalisation (i18n) of novelWriter. The release introduces support for Portuguese, French,
+and Norwegian in addition to the default English.
+
+This is a beta release. Use with caution on live project.
+
+### Detailed Changelog
+
+**Internationalisation**
+
+* Added support to the source code for internationalisation of the GUI. Thanks to Bruno Meneguello
+  (@bkmeneguello) for doing most of the work. Issue #93. PRs #673, #680 and #684.
+* Build Novel Project localisation has been added as well. This is separate from the GUI
+  localisation as the project may not be written in the same language as the GUI is set to. PRs
+  #676 and #682.
+* The text editor's auto-replace features now support inserting spaces automatically when replacing
+  quotes, as well as in front of major punctuation. These features are common for writing tools
+  supporting French and Spanish for instance. Issue #703. PR #704.
+
+**User Interface**
+
+* The Preferences dialog has been updated to be more responsive to varying text label lengths due
+  to different needs for different languages. PRs #687 and #711.
+* The Project Settings dialog has been improved to be more consistent and user friendly across the
+  Status, Importance and Auto-Replace tabs. Issue #691. PR #695.
+* The About dialog has been updated to contain more information on contributions. PR #698.
+
+**Translations**
+
+* Portuguese translation added by Bruno Meneguello (@bkmeneguello). PRs #673, #681, #686 and #697.
+* Norwegian translation added by Veronica Olsen (@vkbo). PR #679.
+* German translation added (Build tool only) by Marian Lückhof (@Number042). PR #683.
+* French translation added by Jan Lüdke (@jyhelle). PRs #692, #711 and #713.
+* American English added by Veronica Olsen (@vkbo). PR #693.
+
+**Installation**
+
+* Added i18n support to the setup script. PRs #673 and #729.
+
+**Code Maintenance**
+
+* The ISO lookup dictionary for language codes has been removed and replaced with the lookup
+  features available in Qt5 through QLocal. The remaining two source files in the constants folder
+  have been moved up a level as well. PRs #673 and #730.
+
+----
+
+## Version 1.2.3 [2021-04-18]
+
+### Release Notes
+
+This patch fixes a bug where the user's word list (personal dictionary) was not saved properly for
+new projects. The added words were thus "forgotten" the next time the project was opened.
+
+In addition, uninstall commands have been added to the main setup script to make it easier to clean
+up icons (Linux and Windows) and registry keys (Windows) if the user wishes to uninstall
+novelWriter.
+
+### Detailed Changelog
+
+**Bugfixes**
+
+* Fixed an issue where the initial file for the user dictionary for a new project would not be
+  created the first time a word was added to it. This caused the words the user added to the
+  dictionary to not be loaded the next time the project was opened. Issue #733. PR #734.
+* Some of the `setup.py` commands could not run if the PyQt5 packages were missing due to an import
+  command extracting the version number from the main `nw` package. This was not technically a bug
+  as the choice to do it this way was made deliberately, but a function has been added to the
+  `setup.py` script to allow reading the version number without having to import the `nw` package.
+  PR #749.
+
+**Installation**
+
+* An `xdg-uninstall` option has been added to `setup.py` to uninstall the icons installed into the
+  system by the `xdg-install` command. PR #736.
+* Likewise, a `win-uninstall` option has been added to `setup.py` to uninstall the icons installed
+  into the system by the `win-install` command. Issue #743 and discussion #739. PR #749.
+* Improvements have also been made to the `setup_windows.bat` script, and a complementary
+  `uninstall_windows.bat` has been added as well. PR #749.
+
+----
+
 ## Version 1.2.2 [2021-03-28]
 
 ### Release Notes

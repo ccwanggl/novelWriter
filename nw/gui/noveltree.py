@@ -32,8 +32,8 @@ from time import time
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QAbstractItemView
 
-from nw.constants import nwKeyWords
 from nw.common import checkInt
+from nw.constants import nwKeyWords
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,11 @@ class GuiNovelTree(QTreeWidget):
         self.setIconSize(QSize(iPx, iPx))
         self.setIndentation(iPx)
         self.setColumnCount(3)
-        self.setHeaderLabels(["Title", "Words", "POV"])
+        self.setHeaderLabels([
+            self.tr("Title"),
+            self.tr("Words"),
+            self.tr("POV")
+        ])
         self.itemDoubleClicked.connect(self._treeDoubleClick)
         self.itemSelectionChanged.connect(self._itemSelected)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -73,9 +77,9 @@ class GuiNovelTree(QTreeWidget):
 
         treeHeadItem = self.headerItem()
         treeHeadItem.setTextAlignment(self.C_WORDS, Qt.AlignRight)
-        treeHeadItem.setToolTip(self.C_TITLE, "Section title")
-        treeHeadItem.setToolTip(self.C_WORDS, "Word count")
-        treeHeadItem.setToolTip(self.C_POV,   "Point-of-view character")
+        treeHeadItem.setToolTip(self.C_TITLE, self.tr("Section title"))
+        treeHeadItem.setToolTip(self.C_WORDS, self.tr("Word count"))
+        treeHeadItem.setToolTip(self.C_POV,   self.tr("Point-of-view character"))
 
         treeHeader = self.header()
         treeHeader.setStretchLastSection(True)

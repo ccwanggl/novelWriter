@@ -26,8 +26,8 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import logging
 
-from nw.core.tokenizer import Tokenizer
 from nw.constants import nwLabels
+from nw.core.tokenizer import Tokenizer
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +77,7 @@ class ToMarkdown(Tokenizer):
                 self.FMT_D_B : "",   self.FMT_D_E : "",
             }
         else:
-            # GitHub and novelWriter
+            # GitHub
             mdTags = {
                 self.FMT_B_B : "**", self.FMT_B_E : "**",
                 self.FMT_I_B : "_",  self.FMT_I_E : "_",
@@ -134,10 +134,10 @@ class ToMarkdown(Tokenizer):
                     thisPar.append(tTemp.rstrip() + " ")
 
             elif tType == self.T_SYNOPSIS and self.doSynopsis:
-                tmpResult.append("**Synopsis:** %s\n\n" % tText)
+                tmpResult.append("**%s:** %s\n\n" % (self._localLookup("Synopsis"), tText))
 
             elif tType == self.T_COMMENT and self.doComments:
-                tmpResult.append("**Comment:** %s\n\n" % tText)
+                tmpResult.append("**%s:** %s\n\n" % (self._localLookup("Comment"), tText))
 
             elif tType == self.T_KEYWORD and self.doKeywords:
                 tmpResult.append(self._formatKeywords(tText, tStyle))

@@ -24,12 +24,11 @@ import time
 import pytest
 
 from nw.common import (
-    checkString, checkBool, checkInt, colRange, formatInt, transferCase,
+    checkString, checkBool, checkInt, formatInt, transferCase,
     fuzzyTime, checkHandle, formatTimeStamp, formatTime, hexToInt,
     makeFileNameSafe, isHandle, isTitleTag, isItemClass, isItemType,
-    isItemLayout
+    isItemLayout, numberToRoman
 )
-from tools import cmpList
 
 @pytest.mark.base
 def testBaseCommon_CheckString():
@@ -192,34 +191,6 @@ def testBaseCommon_HexToInt():
 # END Test testBaseCommon_HexToInt
 
 @pytest.mark.base
-def testBaseCommon_ColRange():
-    """Test the colRange function.
-    """
-    assert colRange([0, 0], [0, 0], 0) is None
-    assert cmpList(
-        colRange([200, 50, 0], [50, 200, 0], 1),
-        [200, 50, 0]
-    )
-    assert cmpList(
-        colRange([200, 50, 0], [50, 200, 0], 2),
-        [[200, 50, 0], [50, 200, 0]]
-    )
-    assert cmpList(
-        colRange([200, 50, 0], [50, 200, 0], 3),
-        [[200, 50, 0], [125, 125, 0], [50, 200, 0]]
-    )
-    assert cmpList(
-        colRange([200, 50, 0], [50, 200, 0], 4),
-        [[200, 50, 0], [150, 100, 0], [100, 150, 0], [50, 200, 0]]
-    )
-    assert cmpList(
-        colRange([200, 50, 0], [50, 200, 0], 5),
-        [[200, 50, 0], [162, 87, 0], [124, 124, 0], [86, 161, 0], [50, 200, 0]]
-    )
-
-# END Test testBaseCommon_ColRange
-
-@pytest.mark.base
 def testBaseCommon_FormatTimeStamp():
     """Test the formatTimeStamp function.
     """
@@ -325,3 +296,30 @@ def testBaseCommon_MakeFileNameSafe():
     assert makeFileNameSafe("aaaa bbbb") == "aaaa bbbb"
 
 # END Test testBaseCommon_MakeFileNameSafe
+
+@pytest.mark.core
+def testBaseCommon_RomanNumbers():
+    """Test conversion of integers to Roman numbers.
+    """
+    assert numberToRoman(None, False) == "NAN"
+    assert numberToRoman(0, False) == "OOR"
+    assert numberToRoman(1, False) == "I"
+    assert numberToRoman(2, False) == "II"
+    assert numberToRoman(3, False) == "III"
+    assert numberToRoman(4, False) == "IV"
+    assert numberToRoman(5, False) == "V"
+    assert numberToRoman(6, False) == "VI"
+    assert numberToRoman(7, False) == "VII"
+    assert numberToRoman(8, False) == "VIII"
+    assert numberToRoman(9, False) == "IX"
+    assert numberToRoman(10, False) == "X"
+    assert numberToRoman(14, False) == "XIV"
+    assert numberToRoman(42, False) == "XLII"
+    assert numberToRoman(99, False) == "XCIX"
+    assert numberToRoman(142, False) == "CXLII"
+    assert numberToRoman(542, False) == "DXLII"
+    assert numberToRoman(999, False) == "CMXCIX"
+    assert numberToRoman(2010, False) == "MMX"
+    assert numberToRoman(999, True) == "cmxcix"
+
+# END Test testBaseCommon_RomanNumbers

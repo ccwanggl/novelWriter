@@ -25,10 +25,9 @@ copyright = "2018–2021, Veronica Berglyd Olsen"
 author = "Veronica Berglyd Olsen"
 
 # The short X.Y version
-version = "1.2.2"
+version = "1.3"
 # The full version, including alpha/beta/rc tags
-release = "1.2.2"
-
+release = "1.3-rc1"
 
 # -- General configuration ---------------------------------------------------
 
@@ -46,7 +45,6 @@ today_fmt = "%A, %d %B %Y at %H:%M"
 language = None
 exclude_patterns = []
 pygments_style = None
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -75,12 +73,10 @@ html_css_files = [
 # "searchbox.html"]``.
 # html_sidebars = {}
 
-
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "novelWriterDoc"
-
 
 # -- Options for LaTeX output ------------------------------------------------
 
@@ -110,7 +106,6 @@ latex_documents = [(
     author, "manual"
 )]
 
-
 # -- Options for manual page output ------------------------------------------
 
 # One entry per manual page. List of tuples
@@ -118,7 +113,6 @@ latex_documents = [(
 man_pages = [(
     master_doc, "novelwriter", "novelWriter Documentation", [author], 1
 )]
-
 
 # -- Options for Texinfo output ----------------------------------------------
 
@@ -129,7 +123,6 @@ texinfo_documents = [(
     master_doc, "novelWriter", "novelWriter Documentation", author,
     "novelWriter", "Markdown-like editor for novels.", "Miscellaneous"
 )]
-
 
 # -- Options for Epub output -------------------------------------------------
 

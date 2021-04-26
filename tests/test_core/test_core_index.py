@@ -26,11 +26,12 @@ import json
 
 from shutil import copyfile
 
+from dummy import causeException
 from tools import cmpFiles
 
 from nw.core.project import NWProject
-from nw.core.index import NWIndex
-from nw.constants import nwItemClass, nwItemLayout
+from nw.core.index import NWIndex, countWords
+from nw.enum import nwItemClass, nwItemLayout
 
 @pytest.mark.core
 def testCoreIndex_LoadSave(monkeypatch, nwLipsum, dummyGUI, outDir, refDir):
@@ -61,16 +62,12 @@ def testCoreIndex_LoadSave(monkeypatch, nwLipsum, dummyGUI, outDir, refDir):
 
     assert not theIndex.reIndexHandle(None)
 
-    # Dummy exception function
-    def doPanic(*arg, **kwargs):
-        raise Exception
-
     # Make the save fail
-    monkeypatch.setattr(json, "dump", doPanic)
-    assert not theIndex.saveIndex()
+    with monkeypatch.context() as mp:
+        mp.setattr(json, "dump", causeException)
+        assert not theIndex.saveIndex()
 
     # Make the save pass
-    monkeypatch.undo()
     assert theIndex.saveIndex()
 
     # Take a copy of the index
@@ -100,11 +97,11 @@ def testCoreIndex_LoadSave(monkeypatch, nwLipsum, dummyGUI, outDir, refDir):
     assert not theIndex._textCounts
 
     # Make the load fail
-    monkeypatch.setattr(json, "load", doPanic)
-    assert not theIndex.loadIndex()
+    with monkeypatch.context() as mp:
+        mp.setattr(json, "load", causeException)
+        assert not theIndex.loadIndex()
 
     # Make the load pass
-    monkeypatch.undo()
     assert theIndex.loadIndex()
 
     assert str(theIndex._tagIndex) == tagIndex
@@ -1175,3 +1172,34 @@ def testCoreIndex_CheckTextCounts(dummyGUI):
         theIndex._checkTextCounts()
 
 # END Test testCoreIndex_CheckTextCounts
+
+@pytest.mark.core
+def testCoreIndex_CountWords():
+    """Test the word counter and the exclusion filers.
+    """
+    testText = (
+        "# Heading One\n"
+        "## Heading Two\n"
+        "### Heading Three\n"
+        "#### Heading Four\n"
+        "\n"
+        "@tag: value\n"
+        "\n"
+        "% A comment that should n ot be counted.\n"
+        "\n"
+        "The first paragraph.\n"
+        "\n"
+        "The second paragraph.\n"
+        "\n"
+        "\n"
+        "The third paragraph.\n"
+        "\n"
+        "Dashes\u2013and even longer\u2014dashes."
+    )
+    cC, wC, pC = countWords(testText)
+
+    assert cC == 138
+    assert wC == 22
+    assert pC == 4
+
+# END Test testCoreIndex_CountWords

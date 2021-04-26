@@ -26,7 +26,8 @@ import pytest
 from lxml import etree
 
 from nw.core.project import NWProject, NWItem, NWTree
-from nw.constants import nwItemClass, nwItemType, nwItemLayout, nwFiles
+from nw.enum import nwItemClass, nwItemType, nwItemLayout
+from nw.constants import nwFiles
 
 @pytest.fixture(scope="function")
 def dummyItems(dummyGUI):
@@ -409,8 +410,6 @@ def testCoreTree_MakeHandles(monkeypatch, dummyGUI):
     tHandle = theTree._makeHandle()
     theTree._projTree[tHandle] = None
     assert tHandle == "a79acf4c634a7"
-
-    monkeypatch.undo()
 
 # END Test testCoreTree_MakeHandles
 

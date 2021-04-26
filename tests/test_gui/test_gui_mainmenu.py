@@ -28,9 +28,8 @@ from PyQt5.QtGui import QTextCursor, QTextBlock
 from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
 
 from nw.gui.doceditor import GuiDocEditor
-from nw.constants import (
-    nwUnicode, nwDocAction, nwDocInsert, nwKeyWords, nwWidget
-)
+from nw.enum import nwDocAction, nwDocInsert, nwWidget
+from nw.constants import nwKeyWords, nwUnicode
 
 keyDelay = 2
 typeDelay = 1
@@ -536,9 +535,9 @@ def testGuiMenu_Insert(qtbot, monkeypatch, nwGUI, fncDir, fncProj):
 
     # Faulty Keyword Inserts
     assert not nwGUI.docEditor.insertKeyWord("blabla")
-    monkeypatch.setattr(QTextBlock, "isValid", lambda *args, **kwards: False)
-    assert not nwGUI.docEditor.insertKeyWord(nwKeyWords.TAG_KEY)
-    monkeypatch.undo()
+    with monkeypatch.context() as mp:
+        mp.setattr(QTextBlock, "isValid", lambda *args, **kwards: False)
+        assert not nwGUI.docEditor.insertKeyWord(nwKeyWords.TAG_KEY)
 
     nwGUI.docEditor.clear()
 
@@ -597,10 +596,9 @@ def testGuiMenu_Insert(qtbot, monkeypatch, nwGUI, fncDir, fncProj):
     nwGUI.mainMenu.aFileDetails.activate(QAction.Trigger)
 
     theBits = theMessage.split("<br>")
-    assert len(theBits) == 3
-    assert theBits[0] == "File details for the currently open file"
-    assert theBits[1] == "Handle: 0e17daca5f3e1"
-    assert theBits[2] == "Location: %s" % os.path.join(fncProj, "content", "0e17daca5f3e1.nwd")
+    assert len(theBits) == 2
+    assert theBits[0] == "The currently open file is saved in:"
+    assert theBits[1] == os.path.join(fncProj, "content", "0e17daca5f3e1.nwd")
 
     # qtbot.stopForInteraction()
 

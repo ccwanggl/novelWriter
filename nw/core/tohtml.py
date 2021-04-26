@@ -27,7 +27,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 import logging
 
 from nw.core.tokenizer import Tokenizer
-from nw.constants import nwLabels, nwKeyWords, nwHtmlUnicode
+from nw.constants import nwKeyWords, nwLabels, nwHtmlUnicode
 
 logger = logging.getLogger(__name__)
 
@@ -406,17 +406,20 @@ class ToHtml(Tokenizer):
         """Apply HTML formatting to synopsis.
         """
         if self.genMode == self.M_PREVIEW:
-            return "<p class='comment'><span class='synopsis'>Synopsis:</span> %s</p>\n" % tText
+            sSynop = self._trSynopsis
+            return f"<p class='comment'><span class='synopsis'>{sSynop}:</span> {tText}</p>\n"
         else:
-            return "<p class='synopsis'><strong>Synopsis:</strong> %s</p>\n" % tText
+            sSynop = self._localLookup("Synopsis")
+            return f"<p class='synopsis'><strong>{sSynop}:</strong> {tText}</p>\n"
 
     def _formatComments(self, tText):
         """Apply HTML formatting to comments.
         """
         if self.genMode == self.M_PREVIEW:
-            return "<p class='comment'>%s</p>\n" % tText
+            return f"<p class='comment'>{tText}</p>\n"
         else:
-            return "<p class='comment'><strong>Comment:</strong> %s</p>\n" % tText
+            sComm = self._localLookup("Comment")
+            return f"<p class='comment'><strong>{sComm}:</strong> {tText}</p>\n"
 
     def _formatKeywords(self, tText):
         """Apply HTML formatting to keywords.
